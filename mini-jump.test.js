@@ -28,4 +28,12 @@ describe("mini-jump", () => {
   it("can handle another first-move ending", () => {
     expect(miniJump([1, 1])).toBe(1);
   });
+
+  it("can handle a zero after the first index", () => {
+    expect(miniJump([1, 0, 1])).toBe(-1);
+  });
+
+  it("can handle a long series of ones", () => {
+    expect(miniJump([1, 1, 1, 1, 1, 1, 1, 1, 1, 1])).toBe(9);
+  });
 });
