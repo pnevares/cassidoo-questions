@@ -17,8 +17,8 @@ describe("mini-jump", () => {
     expect(miniJump([])).toBe(0);
   });
 
-  it("can handle a zero", () => {
-    expect(miniJump([0])).toBe(-1);
+  it("can handle a starting zero", () => {
+    expect(miniJump([0])).toBe(0);
   });
 
   it("can handle a first-move ending", () => {
