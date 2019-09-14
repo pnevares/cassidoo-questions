@@ -7,28 +7,35 @@
 // miniJump([1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9])
 
 const miniJump = steps => {
-  let totalJumps = 0;
-  let position = 0;
+  let skipToPosition;
+  const lastPosition = steps.length - 1;
 
-  while (position < steps.length) {
-    let maxSteps = steps[position];
-    if (maxSteps === 0) return -1;
-
-    if (position + 1 + maxSteps >= steps.length) {
-      position = steps.length;
-    } else {
-      let bestPosition = position + 1;
-      for (let index = 2; index <= maxSteps; index++) {
-        if (steps[position + index] >= steps[bestPosition]) {
-          bestPosition = index;
-        }
-      }
-      position = bestPosition;
+  return steps.reduce((totalJumps, maxJumps, currentPosition) => {
+    if (
+      currentPosition === lastPosition ||
+      (skipToPosition && skipToPosition !== currentPosition)
+    ) {
+      return totalJumps;
     }
-    totalJumps += 1;
-  }
+    if (maxJumps === 0) return -1;
 
-  return totalJumps;
+    const nextPosition = currentPosition + 1;
+    if (currentPosition + maxJumps >= lastPosition) {
+      skipToPosition = lastPosition;
+    } else {
+      skipToPosition =
+        nextPosition +
+        steps
+          .slice(nextPosition, nextPosition + maxJumps)
+          .reduce((bestIndex, currentJumps, currentIndex, options) => {
+            if (!bestIndex || currentJumps >= options[bestIndex])
+              return currentIndex;
+            return bestIndex;
+          }, null);
+    }
+
+    return totalJumps + 1;
+  }, 0);
 };
 
 module.exports = miniJump;
