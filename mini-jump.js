@@ -8,24 +8,31 @@
 
 const miniJump = steps => {
   let skipToPosition;
-  
+  const lastPosition = steps.length - 1;
+
   return steps.reduce((totalJumps, maxJumps, currentPosition) => {
-    if (currentPosition === steps.length - 1) return totalJumps;
-    if (skipToPosition && skipToPosition !== currentPosition) return totalJumps;
-    if (currentPosition + maxJumps >= steps.length - 1) {
-      skipToPosition = steps.length - 1;
-      return totalJumps + 1;
+    if (
+      currentPosition === lastPosition ||
+      (skipToPosition && skipToPosition !== currentPosition)
+    ) {
+      return totalJumps;
     }
     if (maxJumps === 0) return -1;
 
-    skipToPosition =
-      currentPosition + 1 +
-      steps
-        .slice(currentPosition + 1, currentPosition + 1 + maxJumps)
-        .reduce((bestIndex, currentJumps, currentIndex, options) => {
-          if (!bestIndex || options[currentIndex] >= options[bestIndex]) return currentIndex;
-          return bestIndex;
-        }, null);
+    const nextPosition = currentPosition + 1;
+    if (currentPosition + maxJumps >= lastPosition) {
+      skipToPosition = lastPosition;
+    } else {
+      skipToPosition =
+        nextPosition +
+        steps
+          .slice(nextPosition, nextPosition + maxJumps)
+          .reduce((bestIndex, currentJumps, currentIndex, options) => {
+            if (!bestIndex || currentJumps >= options[bestIndex])
+              return currentIndex;
+            return bestIndex;
+          }, null);
+    }
 
     return totalJumps + 1;
   }, 0);
